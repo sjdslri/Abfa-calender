@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>تقویم محتوایی ۱۴۰۵ | آبفای کرمان</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        :root {
+            --primary: #0b4f6c; --primary-light: #1f7a8c; --primary-dark: #06283d;
+            --accent: #4ecdc4; --danger: #d32f2f; --success: #2e7d32; --success-light: #66bb6a;
+            --bg-gradient: linear-gradient(145deg, #e8f4fd 0%, #d0e8f7 50%, #c2e0f4 100%);
+            --shadow: 0 20px 40px -12px rgba(0, 60, 100, 0.35);
+            --shadow-sm: 0 6px 16px -8px rgba(0, 60, 100, 0.2);
+            --font: 'Vazirmatn', 'Tahoma', 'Segoe UI', sans-serif;
+        }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: var(--font); background: var(--bg-gradient); background-attachment: fixed;
+            min-height: 100vh; padding: 24px 16px; display: flex; flex-direction: column;
+            align-items: center; color: #1e2b3c; position: relative; overflow-x: hidden;
+        }
+        body::before {
+            content: ''; position: fixed; inset: 0;
+            background-image: radial-gradient(circle at 10% 20%, rgba(78, 205, 196, 0.08) 0%, transparent 25%),
+                radial-gradient(circle at 90% 80%, rgba(31, 122, 140, 0.06) 0%, transparent 30%),
+                radial-gradient(circle at 30% 90%, rgba(11, 79, 108, 0.05) 0%, transparent 25%),
+                radial-gradient(circle at 70% 10%, rgba(78, 205, 196, 0.07) 0%, transparent 30%);
+            pointer-events: none; z-index: 0;
+        }
+        .app-container {
+            max-width: 1200px; width: 100%; background: rgba(255, 255, 255, 0.55);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-radius: 40px; padding: 32px 28px 28px; box-shadow: var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.6); position: relative; z-index: 1; margin-bottom: 24px;
+        }
+        .header-section { display: flex; align-items: center; gap: 16px; margin-bottom: 6px; flex-wrap: wrap; }
+        .logo-icon { font-size: 2.2rem; line-height: 1; filter: drop-shadow(0 4px 8px rgba(11, 79, 108, 0.25)); }
+        h1 { font-size: 1.9rem; font-weight: 800; color: var(--primary-dark); letter-spacing: -0.5px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; line-height: 1.3; }
+        h1 span { background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: #fff; font-size: 0.8rem; font-weight: 600; padding: 6px 18px; border-radius: 60px; box-shadow: 0 6px 14px -6px var(--primary); }
+        .subhead { font-size: 0.95rem; color: #2a5a7a; margin-bottom: 28px; border-right: 4px solid var(--accent); padding: 6px 16px 6px 0; background: linear-gradient(90deg, transparent, rgba(78, 205, 196, 0.08)); border-radius: 0 12px 12px 0; font-weight: 500; }
+        .month-strip { display: flex; flex-wrap: nowrap; gap: 10px; justify-content: flex-start; margin-bottom: 28px; overflow-x: auto; padding: 6px 4px 14px; scrollbar-width: thin; -webkit-overflow-scrolling: touch; }
+        .month-strip::-webkit-scrollbar { height: 4px; }
+        .month-strip::-webkit-scrollbar-thumb { background: #a0c0da; border-radius: 10px; }
+        .month-btn { background: #ffffffcc; border: 1.5px solid #c2d9ea; color: #17445c; padding: 10px 20px; border-radius: 60px; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03); white-space: nowrap; font-family: var(--font); flex-shrink: 0; }
+        .month-btn:hover { background: #e4f0fc; border-color: #7fb2d6; transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+        .month-btn.active { background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: #fff; border-color: var(--primary); box-shadow: 0 8px 20px -8px var(--primary); transform: translateY(-2px) scale(1.02); }
+        .calendar-wrapper { padding-bottom: 6px; border-radius: 24px; }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; min-width: 720px; }
+        .day-header { text-align: center; font-weight: 800; font-size: 0.8rem; color: #1a4a64; padding: 14px 0 8px; background: linear-gradient(180deg, #e2eef8, #d8e8f4); border-radius: 14px; box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.5); }
+        .day-cell { background: rgba(255, 255, 255, 0.75); backdrop-filter: blur(8px); border-radius: 18px; padding: 10px 8px 8px; min-height: 120px; border: 1px solid rgba(210, 226, 240, 0.8); display: flex; flex-direction: column; transition: all 0.2s ease; position: relative; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02); cursor: pointer; user-select: none; }
+        .day-cell:hover { border-color: #7fb2d6; background: #f4fbff; transform: translateY(-3px); box-shadow: 0 12px 24px -12px rgba(11, 79, 108, 0.2); }
+        .day-cell:active { transform: scale(0.985); }
+        .day-cell.empty { background: transparent; border: 1.5px dashed #c2d6e6; box-shadow: none; opacity: 0.5; cursor: default; }
+        .day-cell.empty:hover { transform: none; background: transparent; border-color: #c2d6e6; box-shadow: none; }
+        .day-number { font-weight: 800; font-size: 1.05rem; color: var(--primary); margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center; padding-bottom: 4px; border-bottom: 1px dashed rgba(42, 127, 170, 0.2); }
+        .day-number small { font-weight: 400; font-size: 0.6rem; color: #648aa8; background: #e8f2fc; padding: 1px 8px; border-radius: 20px; }
+        .event-list { list-style: none; font-size: 0.7rem; line-height: 1.5; color: #1d3b52; flex: 1; overflow-y: auto; max-height: 92px; padding-left: 2px; scrollbar-width: thin; display: flex; flex-direction: column; gap: 3px; }
+        .event-list::-webkit-scrollbar { width: 3px; }
+        .event-list::-webkit-scrollbar-thumb { background: #a0c0da; border-radius: 10px; }
+        .event-list li { background: #eef7fe; padding: 4px 8px 4px 6px; border-radius: 10px; border-right: 4px solid #2a7faa; word-break: break-word; font-weight: 500; display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+        .event-list li.national { border-right-color: #b13e3e; background: #fdf0f0; }
+        .event-list li.water { border-right-color: #1f7a8c; background: #e6f5f7; }
+        .event-list li.kerman { border-right-color: #c47e1a; background: #fff6e8; }
+        .event-list li .ev-text { flex: 1 1 auto; min-width: 0; }
+
+        /* ✅ Confirmed (green) */
+        .event-list li.confirmed {
+            background: linear-gradient(135deg, #dff2e0, #c8e6c9) !important;
+            border-right-color: var(--success) !important;
+            color: #1b5e20;
+            font-weight: 800;
+        }
+        .event-list li.confirmed .ev-text::before {
+            content: '✓ ';
+            color: var(--success);
+            font-weight: 900;
+            font-size: 1em;
+        }
+
+        /* Badge styles in calendar cell */
+        .ev-badge-pending {
+            display: inline-block; font-size: 0.58rem; padding: 1px 6px; border-radius: 8px;
+            background: #fce4e4; color: #b13e3e; font-weight: 800; flex-shrink: 0;
+            border: 1px solid #f5c6c6;
+        }
+        .ev-badge-complete {
+            display: inline-block; font-size: 0.58rem; padding: 1px 6px; border-radius: 8px;
+            background: #c8e6c9; color: #1b5e20; font-weight: 800; flex-shrink: 0;
+            border: 1px solid #a5d6a7;
+        }
+
+        .legend { display: flex; flex-wrap: wrap; gap: 22px; margin-top: 20px; font-size: 0.78rem; color: #2a4a64; font-weight: 600; padding: 12px 8px 0; }
+        .legend-dot { display: inline-block; width: 14px; height: 14px; border-radius: 6px; margin-left: 6px; vertical-align: middle; }
+        .dot-national { background: #b13e3e; } .dot-water { background: #1f7a8c; } .dot-kerman { background: #c47e1a; }
+        .dot-done { background: linear-gradient(135deg, #66bb6a, #2e7d32); display: inline-flex; align-items: center; justify-content: center; color: #fff; font-size: 0.6rem; font-weight: 900; width: 16px; height: 16px; border-radius: 50%; }
+        .hint { font-size: 0.78rem; color: #4a6f8a; margin-top: 18px; background: linear-gradient(90deg, #e9f2fa, #f0f9ff); padding: 11px 20px; border-radius: 40px; display: inline-block; border-right: 4px solid var(--accent); font-weight: 500; }
+        .footer-actions { margin-top: 16px; display: flex; justify-content: flex-end; }
+        .btn { border: none; background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: #fff; padding: 12px 28px; border-radius: 60px; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); font-family: var(--font); box-shadow: 0 8px 20px -8px var(--primary); display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 12px 28px -8px var(--primary-dark); }
+        .btn:active { transform: translateY(0); }
+        .btn-outline { background: transparent; color: var(--primary); border: 1.5px solid var(--primary); box-shadow: none; }
+        .btn-outline:hover { background: rgba(11, 79, 108, 0.06); box-shadow: none; }
+        .btn-sm { padding: 8px 18px; font-size: 0.8rem; }
+
+        /* MODAL */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0, 25, 50, 0.55); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 20px; animation: fadeIn 0.2s ease; }
+        .modal-overlay[hidden] { display: none; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .modal-card { background: #fff; border-radius: 28px; padding: 26px 24px; max-width: 560px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.45); animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; }
+        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1.5px solid #e2eef8; }
+        .modal-title-group { display: flex; align-items: baseline; gap: 10px; }
+        .modal-day-num { font-size: 2.2rem; font-weight: 900; color: var(--primary); line-height: 1; }
+        .modal-month-name { font-size: 1rem; color: #3a5a78; font-weight: 600; }
+        .modal-close { background: #f0f7fc; border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; color: #4a6f8a; font-size: 1rem; font-weight: 700; transition: all 0.2s; flex-shrink: 0; font-family: inherit; }
+        .modal-close:hover { background: #e2eef8; color: var(--primary); transform: rotate(90deg); }
+
+        /* ACCORDION */
+        .acc-list { margin-bottom: 18px; }
+        .empty-events { color: #7a95aa; font-size: 0.82rem; text-align: center; padding: 24px 16px; background: #f5f9fc; border-radius: 14px; border: 1px dashed #d8e6f2; margin-bottom: 16px; }
+        .acc-item { border: 1.5px solid #d8e6f2; border-radius: 14px; margin-bottom: 10px; overflow: hidden; background: #fff; transition: all 0.2s; }
+        .acc-item[data-type="water"] { border-right: 4px solid #1f7a8c; }
+        .acc-item[data-type="national"] { border-right: 4px solid #b13e3e; }
+        .acc-item[data-type="kerman"] { border-right: 4px solid #c47e1a; }
+        .acc-item.done { border-color: #a5d6a7 !important; background: linear-gradient(135deg, #f1f8f1, #e8f5e9); border-right-color: var(--success) !important; }
+        .acc-header { display: flex; align-items: center; gap: 8px; padding: 12px 14px; cursor: pointer; transition: background 0.2s; user-select: none; flex-wrap: wrap; }
+        .acc-header:hover { background: #f5fbff; }
+        .acc-toggle { font-size: 1rem; color: var(--primary); font-weight: 900; transition: transform 0.25s; flex-shrink: 0; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; background: #e8f2fc; border-radius: 6px; }
+        .acc-title { flex: 1 1 130px; font-size: 0.85rem; font-weight: 700; color: #1d3b52; line-height: 1.5; word-break: break-word; min-width: 0; }
+        .acc-item.done .acc-title { color: #1b5e20; }
+        .acc-badge { flex-shrink: 0; font-size: 0.7rem; padding: 4px 10px; border-radius: 20px; font-weight: 700; white-space: nowrap; }
+        .acc-badge.pending { background: #fce4e4; color: #b13e3e; }
+        .acc-badge.pending .red { color: #d32f2f; font-weight: 900; }
+        .acc-badge.complete { background: #c8e6c9; color: #1b5e20; }
+        .acc-badge.done { background: #2e7d32; color: #fff; cursor: pointer; transition: all 0.2s; }
+        .acc-badge.done:hover { background: #1b5e20; transform: scale(1.05); }
+        .acc-badge.none { background: #f0f4f8; color: #7a95aa; font-weight: 500; }
+
+        /* Confirm button */
+        .acc-confirm-btn {
+            flex-shrink: 0;
+            background: linear-gradient(135deg, #2e7d32, #1b5e20);
+            color: #fff;
+            border: none;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.2s;
+            box-shadow: 0 3px 10px -3px rgba(46, 125, 50, 0.5);
+        }
+        .acc-confirm-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 14px -4px rgba(46, 125, 50, 0.6);
+        }
+        .acc-confirm-btn:active { transform: scale(0.97); }
+
+        .acc-del-btn { background: transparent; border: none; color: #a0b8cc; font-size: 1rem; cursor: pointer; padding: 4px 8px; border-radius: 8px; transition: all 0.2s; flex-shrink: 0; font-family: inherit; }
+        .acc-del-btn:hover { background: #fce4e4; color: var(--danger); }
+        .acc-body { padding: 0 14px 14px; background: #fafcff; border-top: 1px dashed #e2eef8; }
+        .tasks-list { list-style: none; margin-bottom: 10px; padding-top: 10px; }
+        .task-item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 10px; margin-bottom: 5px; background: #fff; border: 1px solid #e8f0f8; transition: all 0.15s; }
+        .task-item:hover { background: #f5fbff; }
+        .task-item.task-done { background: #f1f8f1; border-color: #c8e6c9; }
+        .task-item.task-done .task-text { text-decoration: line-through; color: #7a95aa; }
+        .task-checkbox { width: 18px; height: 18px; accent-color: var(--success); cursor: pointer; flex-shrink: 0; }
+        .task-text { flex: 1; font-size: 0.82rem; color: #1d3b52; word-break: break-word; line-height: 1.5; }
+        .task-del { background: transparent; border: none; color: #a0b8cc; font-size: 1.15rem; font-weight: 900; cursor: pointer; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0; font-family: inherit; line-height: 1; }
+        .task-del:hover { background: #fce4e4; color: var(--danger); }
+        .task-add { display: flex; gap: 6px; padding-top: 6px; }
+        .task-input { flex: 1; font-family: inherit; border: 1.5px solid #d8e6f2; border-radius: 10px; padding: 8px 12px; font-size: 0.82rem; background: #fff; transition: all 0.2s; color: #1e2b3c; }
+        .task-input:focus { outline: none; border-color: var(--primary-light); box-shadow: 0 0 0 3px rgba(42, 127, 170, 0.1); }
+        .task-add-btn { background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: #fff; border: none; width: 38px; height: 38px; border-radius: 10px; font-size: 1.3rem; font-weight: 700; cursor: pointer; transition: all 0.2s; font-family: inherit; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+        .task-add-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 14px -6px var(--primary); }
+
+        .modal-add { display: flex; gap: 8px; flex-wrap: wrap; padding-top: 16px; border-top: 1.5px dashed #e2eef8; margin-top: 8px; }
+        .modal-add input, .modal-add select { font-family: inherit; border: 1.5px solid #c2d9ea; border-radius: 14px; padding: 11px 14px; font-size: 0.88rem; background: #f9fcff; color: #1e2b3c; transition: all 0.2s; }
+        .modal-add input:focus, .modal-add select:focus { outline: none; border-color: var(--primary-light); box-shadow: 0 0 0 4px rgba(42, 127, 170, 0.12); background: #fff; }
+        .modal-add input { flex: 1 1 100%; } .modal-add select { flex: 1 1 auto; min-width: 140px; } .modal-add .btn { flex: 0 0 auto; padding: 11px 22px; font-size: 0.85rem; }
+        .autosave-note { font-size: 0.7rem; color: #6b8aa3; text-align: center; margin-top: 14px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+        .autosave-note::before { content: '💾'; font-size: 0.9rem; }
+
+        /* SUGGESTION */
+        .suggestion-modal .modal-card { max-width: 550px; }
+        .suggestion-title { font-size: 1.1rem; font-weight: 800; color: var(--primary); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+        .suggestion-item { background: #f5fbff; border-radius: 16px; padding: 16px; margin-bottom: 12px; border: 1px solid #d8e6f2; }
+        .suggestion-item h4 { font-size: 0.9rem; font-weight: 800; color: var(--primary-dark); margin-bottom: 8px; }
+        .suggestion-item p { font-size: 0.82rem; line-height: 1.7; color: #2a4a64; margin-bottom: 10px; }
+        .suggestion-source { font-size: 0.72rem; color: #5c7e99; background: #e9f2fa; padding: 6px 12px; border-radius: 20px; display: inline-block; border-right: 3px solid var(--accent); font-weight: 600; }
+        .no-suggestion { text-align: center; padding: 30px 20px; color: #7a95aa; font-size: 0.85rem; background: #f9fcff; border-radius: 16px; border: 1px dashed #d8e6f2; }
+
+        @media (max-width: 720px) {
+            body { padding: 14px 8px 20px; }
+            .app-container { padding: 20px 12px 22px; border-radius: 26px; margin-bottom: 14px; }
+            .header-section { gap: 10px; } .logo-icon { font-size: 1.6rem; }
+            h1 { font-size: 1.15rem; flex-direction: column; align-items: flex-start; gap: 6px; line-height: 1.4; }
+            h1 span { font-size: 0.7rem; padding: 4px 12px; } .subhead { font-size: 0.8rem; padding: 6px 12px 6px 0; margin-bottom: 20px; }
+            .month-strip { gap: 8px; padding: 4px 2px 12px; margin-bottom: 20px; } .month-btn { padding: 8px 15px; font-size: 0.8rem; }
+            .calendar-wrapper { overflow: visible; padding-bottom: 0; } .calendar-grid { display: flex; flex-direction: column; min-width: 0; gap: 7px; }
+            .day-header { display: none; } .day-cell.empty { display: none; }
+            .day-cell { flex-direction: row; align-items: center; min-height: auto; padding: 10px 14px; border-radius: 16px; gap: 12px; box-shadow: 0 3px 10px -6px rgba(0, 60, 100, 0.15); }
+            .day-cell:hover { transform: none; } .day-cell:active { transform: scale(0.98); }
+            .day-cell.no-events { padding: 7px 14px; background: rgba(255, 255, 255, 0.45); box-shadow: none; }
+            .day-cell.no-events .event-list { display: none; }
+            .day-cell.no-events .day-number { border-left: none; padding-left: 0; flex-direction: row; gap: 8px; font-size: 1rem; color: #86a3b8; min-width: auto; }
+            .day-cell.no-events .day-number small { background: transparent; padding: 0; color: #9bb5c6; font-size: 0.68rem; }
+            .day-number { flex: 0 0 auto; margin: 0; border-bottom: none; border-left: 2px solid rgba(42, 127, 170, 0.22); padding: 0 0 0 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; min-width: 54px; font-size: 1.45rem; line-height: 1.05; }
+            .day-number small { font-size: 0.55rem; padding: 1px 6px; margin: 0; }
+            .event-list { max-height: none; overflow: visible; flex: 1; padding: 0; font-size: 0.78rem; gap: 4px; justify-content: center; }
+            .event-list li { padding: 5px 10px 5px 8px; }
+            .legend { gap: 12px; font-size: 0.7rem; padding: 10px 4px 0; margin-top: 14px; } .legend-dot { width: 12px; height: 12px; } .dot-done { width: 14px; height: 14px; font-size: 0.55rem; }
+            .hint { font-size: 0.72rem; padding: 9px 14px; line-height: 1.6; margin-top: 14px; } .footer-actions { margin-top: 12px; } .footer-actions .btn { width: 100%; justify-content: center; }
+            .modal-overlay { align-items: flex-end; padding: 0; }
+            .modal-card { max-width: 100%; width: 100%; max-height: 92vh; border-radius: 26px 26px 0 0; padding: 20px 16px 22px; animation: slideUpMobile 0.32s cubic-bezier(0.4, 0, 0.2, 1); }
+            @keyframes slideUpMobile { from { transform: translateY(100%); } to { transform: translateY(0); } }
+            .modal-day-num { font-size: 1.8rem; } .modal-month-name { font-size: 0.9rem; }
+            .acc-header { padding: 10px 12px; gap: 6px; }
+            .acc-title { font-size: 0.8rem; flex-basis: 100%; order: 3; }
+            .acc-toggle { order: 1; } .acc-badge { order: 2; } .acc-confirm-btn { order: 2; font-size: 0.68rem; padding: 4px 10px; } .acc-del-btn { order: 2; }
+            .modal-add { flex-direction: column; } .modal-add input, .modal-add select, .modal-add .btn { width: 100%; }
+        }
+        @media (max-width: 400px) {
+            h1 { font-size: 1rem; } .month-btn { padding: 6px 11px; font-size: 0.72rem; }
+            .day-cell { padding: 8px 12px; gap: 9px; } .day-number { font-size: 1.2rem; min-width: 46px; padding-left: 9px; }
+            .day-number small { font-size: 0.5rem; } .event-list { font-size: 0.72rem; } .event-list li { padding: 4px 8px 4px 6px; }
+            .acc-title { font-size: 0.78rem; }
+        }
+        @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+    </style>
+</head>
+<body>
+<div class="app-container">
+    <div class="header-section">
+        <span class="logo-icon">💧</span>
+        <h1>تقویم محتوایی ۱۴۰۵ <span>آبفای استان کرمان</span></h1>
+    </div>
+    <div class="subhead">مناسبت‌ها با تسک‌های اجرایی — از برنامه‌ریزی تا تایید نهایی</div>
+
+    <div class="month-strip" id="monthStrip"></div>
+    <div class="calendar-wrapper"><div class="calendar-grid" id="calendarGrid"></div></div>
+
+    <div class="legend">
+        <span><span class="legend-dot dot-national"></span> ملی / مذهبی</span>
+        <span><span class="legend-dot dot-water"></span> تخصصی آب</span>
+        <span><span class="legend-dot dot-kerman"></span> استانی کرمان</span>
+        <span><span class="legend-dot dot-done">✓</span> تایید شده</span>
+    </div>
+
+    <div class="hint">💡 روی هر روز کلیک کنید. تسک‌ها را تیک بزنید؛ وقتی همه انجام شد، دکمه «تایید» سبز می‌شود و مناسبت به رنگ سبز درمی‌آید.</div>
+    <div class="footer-actions"><button class="btn btn-outline btn-sm" id="resetBtn">↺ بازنشانی همه تغییرات</button></div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" hidden>
+    <div class="modal-card" role="dialog" aria-modal="true">
+        <div class="modal-head">
+            <div class="modal-title-group"><span class="modal-day-num" id="modalDayNum">—</span><span class="modal-month-name" id="modalMonthName">—</span></div>
+            <button class="modal-close" id="modalClose" aria-label="بستن">✕</button>
+        </div>
+
+        <div class="acc-list" id="accordion"></div>
+
+        <div class="modal-add">
+            <input type="text" id="modalInput" placeholder="افزودن رویداد جدید برای این روز..." autocomplete="off" />
+            <select id="modalCategory">
+                <option value="national">ملی / مذهبی</option>
+                <option value="water">تخصصی آب</option>
+                <option value="kerman">استانی کرمان</option>
+            </select>
+            <button class="btn" id="modalAddBtn">➕ افزودن رویداد</button>
+        </div>
+        <div style="display:flex; gap:8px; margin-top:12px;">
+            <button class="btn btn-outline" id="suggestionBtn" style="flex:1; justify-content:center;">💡 پیشنهاد</button>
+        </div>
+        <div class="autosave-note">تغییرات به‌صورت خودکار ذخیره می‌شود</div>
+    </div>
+</div>
+
+<!-- SUGGESTION MODAL -->
+<div class="modal-overlay suggestion-modal" id="suggestionOverlay" hidden>
+    <div class="modal-card" role="dialog" aria-modal="true">
+        <div class="modal-head">
+            <div class="modal-title-group"><span class="modal-day-num" id="sugDayNum">—</span><span class="modal-month-name" id="sugMonthName">—</span></div>
+            <button class="modal-close" id="suggestionClose" aria-label="بستن">✕</button>
+        </div>
+        <div class="suggestion-title">💡 پیشنهادات خلاقانه</div>
+        <div id="suggestionContent"></div>
+    </div>
+</div>
+
+<script>
+    /* ═══════════════ DATA ═══════════════ */
+    const MONTHS = [
+        { name: 'فروردین', days: 31 }, { name: 'اردیبهشت', days: 31 }, { name: 'خرداد', days: 31 },
+        { name: 'تیر', days: 31 }, { name: 'مرداد', days: 31 }, { name: 'شهریور', days: 31 },
+        { name: 'مهر', days: 30 }, { name: 'آبان', days: 30 }, { name: 'آذر', days: 30 },
+        { name: 'دی', days: 30 }, { name: 'بهمن', days: 30 }, { name: 'اسفند', days: 29 }
+    ];
+    const WEEKDAYS = ['شنبه', 'یکشنبه', 'دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پنجشنبه', 'جمعه'];
+
+    const DEFAULT_EVENTS = {
+        '0-1': [{ text: 'جشن نوروز / عید سعید فطر', type: 'national' }],
+        '0-2': [{ text: 'عید نوروز — روز جهانی آب', type: 'water' }],
+        '0-3': [{ text: 'عید نوروز — روز جهانی هواشناسی', type: 'national' }],
+        '0-13': [{ text: 'روز طبیعت (سیزده‌بدر)', type: 'national' }],
+        '0-18': [{ text: 'روز جهانی بهداشت', type: 'national' }],
+        '0-25': [{ text: 'روز بزرگداشت عطار نیشابوری — شهادت امام جعفر صادق (ع)', type: 'national' }],
+        '0-30': [{ text: 'ولادت حضرت معصومه (س) — روز دختران', type: 'national' }],
+        '1-1': [{ text: 'روز بزرگداشت سعدی', type: 'national' }],
+        '1-2': [{ text: 'جشن گیاه‌آوری — روز زمین', type: 'national' }],
+        '1-3': [{ text: 'روز بزرگداشت شیخ بهایی — روز ملی کارآفرینی', type: 'national' }],
+        '1-10': [{ text: 'روز ملی خلیج فارس', type: 'national' }],
+        '1-11': [{ text: 'روز جهانی کارگر', type: 'national' }],
+        '1-12': [{ text: 'روز معلم', type: 'national' }],
+        '2-6': [{ text: 'عید سعید قربان', type: 'national' }],
+        '2-14': [{ text: 'عید غدیر خم — رحلت حضرت امام خمینی (ره)', type: 'national' }],
+        '2-15': [{ text: 'قیام ۱۵ خرداد', type: 'national' }],
+        '2-20': [{ text: 'همایش بانوی آب (آبفای استان کرمان)', type: 'water' }],
+        '2-25': [{ text: 'هفته صرفه‌جویی آب — آب، تاب‌آوری و امنیت ملی', type: 'water' }],
+        '2-26': [{ text: 'هفته صرفه‌جویی آب — خانواده هوشمند و فرهنگ مصرف', type: 'water' }],
+        '2-27': [{ text: 'هفته صرفه‌جویی آب — آب، ارزش‌های دینی و حماسه کربلا', type: 'water' }],
+        '2-28': [{ text: 'هفته صرفه‌جویی آب — آب، اقتصاد و سرمایه‌گذاری', type: 'water' }],
+        '2-29': [{ text: 'هفته صرفه‌جویی آب — پساب، محیط زیست و توسعه پایدار', type: 'water' }],
+        '2-30': [{ text: 'هفته صرفه‌جویی آب — آب، تحولات فناورانه و هوش مصنوعی', type: 'water' }],
+        '2-31': [{ text: 'هفته صرفه‌جویی آب — آب، مردمی‌سازی اقتصاد و مسئولیت اجتماعی', type: 'water' }],
+        '3-3': [{ text: 'تاسوعای حسینی', type: 'national' }],
+        '3-4': [{ text: 'عاشورای حسینی', type: 'national' }],
+        '3-14': [{ text: 'روز قلم', type: 'national' }],
+        '3-22': [{ text: 'روز ملی فناوری اطلاعات', type: 'national' }],
+        '4-13': [{ text: 'اربعین حسینی', type: 'national' }],
+        '4-17': [{ text: 'روز خبرنگار', type: 'national' }],
+        '4-21': [{ text: 'رحلت رسول اکرم (ص) — شهادت امام حسن مجتبی (ع)', type: 'national' }],
+        '4-22': [{ text: 'شهادت امام رضا (ع)', type: 'national' }],
+        '4-30': [{ text: 'شهادت امام حسن عسکری (ع) — آغاز امامت حضرت مهدی (عج)', type: 'national' }],
+        '5-1': [{ text: 'روز بزرگداشت ابوعلی سینا — روز پزشک', type: 'national' }],
+        '5-2': [{ text: 'آغاز هفته دولت', type: 'national' }],
+        '5-5': [{ text: 'روز بزرگداشت محمدبن زکریای رازی — روز داروساز', type: 'national' }],
+        '5-8': [{ text: 'روز مبارزه با تروریسم — میلاد رسول اکرم (ص) و امام جعفر صادق (ع)', type: 'national' }],
+        '5-27': [{ text: 'روز شعر و ادب پارسی — بزرگداشت استاد شهریار', type: 'national' }],
+        '5-31': [{ text: 'آغاز هفته دفاع مقدس', type: 'national' }],
+        '6-5': [{ text: 'روز جهانی جهانگردی', type: 'national' }],
+        '6-7': [{ text: 'روز آتش‌نشانی و ایمنی', type: 'national' }],
+        '6-8': [{ text: 'روز بزرگداشت مولوی — روز جهانی ناشنوایان', type: 'national' }],
+        '6-9': [{ text: 'روز جهانی سالمندان', type: 'national' }],
+        '6-13': [{ text: 'روز جهانی معلم', type: 'national' }],
+        '6-16': [{ text: 'روز ملی کودک', type: 'national' }],
+        '6-20': [{ text: 'روز بزرگداشت حافظ', type: 'national' }],
+        '6-22': [{ text: 'جشنواره «نخستین واژه آب» (همزمان با هفته ملی کودک)', type: 'water' }],
+        '7-10': [{ text: 'روز ملی خلیج فارس', type: 'national' }],
+        '7-13': [{ text: 'روز دانش‌آموز', type: 'national' }],
+        '7-24': [{ text: 'روز کتاب و کتاب‌خوانی', type: 'national' }],
+        '7-25': [{ text: 'آغاز نمایشگاه ملی «آب به قیمت جان»', type: 'water' }],
+        '7-26': [{ text: 'نمایشگاه ملی «آب به قیمت جان»', type: 'water' }],
+        '7-27': [{ text: 'پایان نمایشگاه ملی «آب به قیمت جان»', type: 'water' }],
+        '8-7': [{ text: 'روز دانشجو', type: 'national' }],
+        '8-10': [{ text: 'روز جهانی حقوق بشر', type: 'national' }],
+        '8-30': [{ text: 'شب یلدا', type: 'national' }],
+        '9-2': [{ text: 'ولادت امام علی (ع) — روز پدر', type: 'national' }],
+        '9-11': [{ text: 'آغاز «هفته مقاومت» (کرمان) — سالگرد شهادت سردار سلیمانی', type: 'kerman' }],
+        '9-18': [{ text: 'پایان «هفته مقاومت» (کرمان)', type: 'kerman' }],
+        '10-4': [{ text: 'ولادت حضرت قائم (عج) — جشن نیمه شعبان', type: 'national' }],
+        '10-12': [{ text: 'سالروز پیروزی انقلاب اسلامی', type: 'national' }],
+        '10-22': [{ text: 'بیستمین نمایشگاه بین‌المللی صنعت آب و فاضلاب (آغاز)', type: 'water' }],
+        '10-25': [{ text: 'بیستمین نمایشگاه بین‌المللی صنعت آب و فاضلاب (پایان)', type: 'water' }],
+        '11-5': [{ text: 'روز بزرگداشت خواجه نصیرالدین طوسی — روز مهندسی', type: 'national' }],
+        '11-8': [{ text: 'روز امور تربیتی و تربیت اسلامی', type: 'national' }],
+        '11-13': [{ text: 'روز ملی آب (ایران)', type: 'water' }],
+        '11-29': [{ text: 'روز ملی شدن صنعت نفت ایران', type: 'national' }]
+    };
+
+    const SUGGESTIONS = {
+        '0-2': [{ title: 'مسابقه نقاشی «آب، میراث کرمان»', desc: 'برگزاری مسابقه نقاشی برای کودکان با محوریت قنات‌ها و سازه‌های آبی تاریخی استان کرمان و اهدای نشان «میراب کوچک».', source: 'الهام از استان قزوین (نشان «من میراب هستم»)' }],
+        '0-30': [{ title: 'کارگاه «بانوی آب» ویژه مادران و دختران', desc: 'کارگاه آموزشی مدیریت مصرف آب در خانه، معرفی لوازم کاهنده و نقش بانوان در انتقال فرهنگ مصرف بهینه.', source: 'الهام از استان اصفهان (پویش «از من که برمیاد»)' }],
+        '1-2': [{ title: 'کارگاه «آب مجازی» و محیط زیست', desc: 'کارگاه‌های آموزشی برای دانش‌آموزان درباره مفهوم آب مجازی و نقش آن در حفظ محیط زیست.', source: 'الهام از طرح «داناب» و بازی رومیزی «خط آب» استان یزد' }],
+        '1-11': [{ title: 'تقدیر از کارگران حوزه آب و فاضلاب', desc: 'تولید موشن‌گرافیک و محتوای روایی از تلاش کارگران خدمات شهری در حوزه آب.', source: 'الهام از رویکرد استان خراسان رضوی' }],
+        '1-12': [{ title: 'تقدیر از معلمان پیشگام در فرهنگ آب', desc: 'تقدیر از معلمانی که در ترویج مصرف بهینه پیشگام بوده‌اند و دعوت از آن‌ها به جشنواره «نخستین واژه آب».', source: 'الهام از استان خراسان رضوی و فارس' }],
+        '2-20': [{ title: 'همایش بانوی آب (تداوم و گسترش)', desc: 'گسترش همایش با دعوت از بانوان تأثیرگذار، کارگاه‌های تخصصی و معرفی سفیران بانوی آب.', source: 'عملکرد خود آبفای کرمان + اصفهان' }],
+        '2-25': [
+            { title: 'پویش «کرمان منهای ۲۰»', desc: 'کاهش ۲۰ لیتری مصرف روزانه با تبلیغات در مترو و اتوبوس و استفاده از ظرفیت مساجد و هیئات مذهبی.', source: 'الهام از اصفهان (پویش «اصفهان منهای ۲۰») و فارس' },
+            { title: 'برنامه‌های فرهنگی در هیئات مذهبی', desc: 'استفاده از ظرفیت سخنرانان مذهبی و مداحان برای ترویج صرفه‌جویی آب ویژه ایام محرم.', source: 'الهام از استان فارس' }
+        ],
+        '4-17': [{ title: 'پویش «هر شهروند، یک گزارشگر آب»', desc: 'دعوت از خبرنگاران و شهروندان برای ارسال ویدیوهای خلاقانه درباره راهکارهای صرفه‌جویی.', source: 'پویش ملی «هر شهروند، یک گزارشگر آب» (کرمان)' }],
+        '5-2': [{ title: 'نمایشگاه دستاوردها و سفیران آب', desc: 'برگزاری نمایشگاه دستاوردها در هفته دولت و معرفی کودکان به عنوان سفیران آب.', source: 'عملکرد خود آبفای کرمان' }],
+        '6-16': [{ title: 'نمایش «عمو فیتیل‌های‌ها» با موضوع آب', desc: 'اجرای نمایشی خلاقانه برای کودکان با مفاهیم ارزش آب و صرفه‌جویی، همراه با پرسش و پاسخ.', source: 'عملکرد خود آبفای کرمان' }],
+        '6-22': [{ title: 'جشنواره «نخستین واژه آب»', desc: 'نمایش عروسکی، مسابقه نقاشی، شعرخوانی و اهدای نشان «من میراب هستم» به کودکان.', source: 'الهام از قزوین، اصفهان و اردبیل' }],
+        '7-13': [{ title: 'افتتاحیه طرح ملی «داناب»', desc: 'همزمان با روز دانش‌آموز، مراسم افتتاحیه طرح نجات آب در مدارس متوسطه اول کرمان با امضای میثاق‌نامه.', source: 'الهام از استان آذربایجان شرقی' }],
+        '7-19': [{ title: 'پویش «نجات قطره‌ها»', desc: 'پویش در یکی از مدارس کرمان شامل کارگاه آموزشی، ساخت کاردستی و رنگ‌آمیزی مشارکتی دیوار مدرسه.', source: 'الهام از استان البرز' }],
+        '7-24': [
+            { title: 'جشنواره کتاب و کتابخوانی (کارکنان)', desc: 'جشنواره برای کارکنان آبفای کرمان با فروش کتاب، مسابقه کتاب‌خوانی و کارگاه تقویت حافظه.', source: 'الهام از آبفای منطقه ۶ اصفهان' },
+            { title: 'توزیع بسته فرهنگی کتاب', desc: 'توزیع کتاب‌های محیط زیست و مدیریت منابع آب میان همکاران و خانواده‌ها.', source: 'الهام از آبفای سبزوار' }
+        ],
+        '8-7': [
+            { title: 'طرح «سفیران آب» در دانشگاه‌ها', desc: 'انتخاب دانشجویان علاقه‌مند به عنوان سفیران آب برای انتقال پیام‌های مدیریت مصرف.', source: 'الهام از استان البرز' },
+            { title: 'بازدید علمی دانشجویان از تاسیسات', desc: 'تور بازدید دانشجویان مهندسی آب و محیط زیست از تصفیه‌خانه و آزمایشگاه.', source: 'الهام از استان البرز' }
+        ],
+        '8-14': [{ title: 'آغاز پویش «نصفش کنیم»', desc: 'پویش کاهش ۵۰ درصدی مصرف آب با بیلبوردهای شهری و کمپین فضای مجازی.', source: 'الهام از استان تهران' }],
+        '8-30': [
+            { title: 'جشن کودکانه شب یلدا با محوریت آب', desc: 'جشن ویژه کودکان در فرهنگسراها با نمایش، مسابقه و آموزش صرفه‌جویی به زبان کودکانه.', source: 'الهام از استان تهران' },
+            { title: 'تقدیر از «خوش‌مصرف‌ها» در آستانه یلدا', desc: 'تقدیر از مشترکان با الگوی مصرف بهینه (به‌ویژه خانواده‌های معظم شهدا) با اهدای لوح «حامی آب».', source: 'الهام از آبفای منطقه ۶ تهران' }
+        ],
+        '9-11': [{ title: 'محتوای ویژه «آب، ایثار و مقاومت»', desc: 'روایت تلاش‌های جهادگران عرصه آب در مناطق محروم، همزمان با سالگرد شهادت سردار سلیمانی.', source: 'الهام از استان فارس' }],
+        '11-5': [{ title: 'تقدیر از مهندسان و کارکنان فنی', desc: 'تقدیر از مهندسان در پروژه‌های آبرسانی و انتشار محتوای پشت‌صحنه تلاش‌هایشان.', source: 'الهام از وزارت نیرو' }],
+        '11-13': [{ title: 'گزارش تصویری وضعیت منابع آبی کرمان', desc: 'انتشار اینفوگرافیک و گزارش تصویری از وضعیت منابع آبی استان و دعوت از شهروندان برای بازدید از تصفیه‌خانه‌ها.', source: 'الهام از استان خراسان رضوی' }]
+    };
+
+    /* ═══════════════ STORAGE ═══════════════ */
+    const STORAGE_EVENTS = 'abfa_kerman_1405_events_v4';
+
+    let currentMonth = 0;
+    let events = {};
+    let editingMonth = null, editingDay = null;
+
+    function migrateData(evts) {
+        Object.keys(evts).forEach(key => {
+            evts[key] = evts[key].map(ev => {
+                if (!Array.isArray(ev.tasks)) ev.tasks = [];
+                if (typeof ev.confirmed !== 'boolean') {
+                    // auto-confirm old data where all tasks were done
+                    const allDone = ev.tasks.length > 0 && ev.tasks.every(t => t.done);
+                    ev.confirmed = allDone;
+                }
+                return ev;
+            });
+        });
+        return evts;
+    }
+
+    function loadFromStorage() {
+        const se = localStorage.getItem(STORAGE_EVENTS);
+        if (se) {
+            try { events = migrateData(JSON.parse(se)); }
+            catch (e) { events = JSON.parse(JSON.stringify(DEFAULT_EVENTS)); }
+        } else {
+            events = JSON.parse(JSON.stringify(DEFAULT_EVENTS));
+        }
+    }
+    function saveEvents() {
+        try { localStorage.setItem(STORAGE_EVENTS, JSON.stringify(events)); } catch (e) {}
+    }
+    function toPersianDigits(n) {
+        const p = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+        return String(n).replace(/\d/g, d => p[+d]);
+    }
+    function getEventsForDay(m, d) { return events[`${m}-${d}`] || []; }
+
+    function getEventTaskStats(ev) {
+        const tasks = ev.tasks || [];
+        const total = tasks.length;
+        const done = tasks.filter(t => t.done).length;
+        return { total, done, pending: total - done };
+    }
+    function areAllTasksDone(ev) {
+        const tasks = ev.tasks || [];
+        return tasks.length > 0 && tasks.every(t => t.done);
+    }
+    function isEventConfirmed(ev) {
+        return ev.confirmed === true;
+    }
+
+    /* ═══════════════ MONTH BUTTONS ═══════════════ */
+    function buildMonthButtons() {
+        const strip = document.getElementById('monthStrip');
+        strip.innerHTML = '';
+        MONTHS.forEach((m, idx) => {
+            const btn = document.createElement('button');
+            btn.className = 'month-btn' + (idx === currentMonth ? ' active' : '');
+            btn.textContent = m.name;
+            btn.addEventListener('click', () => {
+                currentMonth = idx;
+                buildMonthButtons();
+                renderCalendar();
+                btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+            });
+            strip.appendChild(btn);
+        });
+    }
+
+    /* ═══════════════ RENDER CALENDAR ═══════════════ */
+    function renderCalendar() {
+        const grid = document.getElementById('calendarGrid');
+        grid.innerHTML = '';
+
+        WEEKDAYS.forEach(wd => {
+            const h = document.createElement('div');
+            h.className = 'day-header';
+            h.textContent = wd;
+            grid.appendChild(h);
+        });
+
+        const month = MONTHS[currentMonth];
+        const daysInMonth = month.days;
+        let daysBefore = 0;
+        for (let i = 0; i < currentMonth; i++) daysBefore += MONTHS[i].days;
+        const firstWeekdayIndex = daysBefore % 7;
+
+        for (let i = 0; i < firstWeekdayIndex; i++) {
+            const empty = document.createElement('div');
+            empty.className = 'day-cell empty';
+            grid.appendChild(empty);
+        }
+
+        for (let d = 1; d <= daysInMonth; d++) {
+            const cell = document.createElement('div');
+            cell.className = 'day-cell';
+            cell.dataset.day = d;
+            cell.dataset.month = currentMonth;
+            cell.setAttribute('role', 'button');
+            cell.setAttribute('tabindex', '0');
+
+            const dayEvents = getEventsForDay(currentMonth, d);
+            if (dayEvents.length === 0) cell.classList.add('no-events');
+
+            const numDiv = document.createElement('div');
+            numDiv.className = 'day-number';
+            numDiv.innerHTML = `${toPersianDigits(d)} <small>${month.name}</small>`;
+            cell.appendChild(numDiv);
+
+            const ul = document.createElement('ul');
+            ul.className = 'event-list';
+
+            dayEvents.forEach(ev => {
+                const li = document.createElement('li');
+                li.className = ev.type || 'national';
+                const stats = getEventTaskStats(ev);
+                const allDone = areAllTasksDone(ev);
+                const confirmed = isEventConfirmed(ev);
+
+                if (confirmed) {
+                    li.classList.add('confirmed');
+                    const span = document.createElement('span');
+                    span.className = 'ev-text';
+                    span.textContent = ev.text;
+                    li.appendChild(span);
+                } else {
+                    const span = document.createElement('span');
+                    span.className = 'ev-text';
+                    span.textContent = ev.text;
+                    li.appendChild(span);
+                    if (stats.total > 0) {
+                        const badge = document.createElement('span');
+                        badge.className = allDone ? 'ev-badge-complete' : 'ev-badge-pending';
+                        badge.textContent = `${toPersianDigits(stats.done)}/${toPersianDigits(stats.total)}`;
+                        badge.title = allDone
+                            ? `همه ${toPersianDigits(stats.total)} تسک انجام شد — در انتظار تایید`
+                            : `${toPersianDigits(stats.done)} انجام‌شده از ${toPersianDigits(stats.total)}`;
+                        li.appendChild(badge);
+                    }
+                }
+
+                ul.appendChild(li);
+            });
+
+            cell.appendChild(ul);
+            cell.addEventListener('click', () => openModal(currentMonth, d));
+            cell.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    openModal(currentMonth, d);
+                }
+            });
+            grid.appendChild(cell);
+        }
+    }
+
+    /* ═══════════════ MODAL ═══════════════ */
+    const modalOverlay = document.getElementById('modalOverlay');
+    const modalDayNum = document.getElementById('modalDayNum');
+    const modalMonthName = document.getElementById('modalMonthName');
+    const accordion = document.getElementById('accordion');
+    const modalInput = document.getElementById('modalInput');
+    const modalCategory = document.getElementById('modalCategory');
+    const modalAddBtn = document.getElementById('modalAddBtn');
+
+    function openModal(monthIdx, day) {
+        editingMonth = monthIdx;
+        editingDay = day;
+        modalDayNum.textContent = toPersianDigits(day);
+        modalMonthName.textContent = MONTHS[monthIdx].name;
+        buildAccordion();
+        modalOverlay.hidden = false;
+        document.body.style.overflow = 'hidden';
+        setTimeout(() => modalInput.focus(), 150);
+    }
+
+    function closeModal() {
+        modalOverlay.hidden = true;
+        document.body.style.overflow = '';
+        editingMonth = null;
+        editingDay = null;
+        modalInput.value = '';
+        renderCalendar();
+    }
+
+    /* ═══════════════ ACCORDION ═══════════════ */
+    function buildAccordion() {
+        const key = `${editingMonth}-${editingDay}`;
+        const list = events[key] || [];
+
+        // preserve open state
+        const openSet = new Set();
+        accordion.querySelectorAll('.acc-item').forEach(item => {
+            if (!item.querySelector('.acc-body').hidden) {
+                openSet.add(item.dataset.eventIdx);
+            }
+        });
+
+        accordion.innerHTML = '';
+
+        if (list.length === 0) {
+            const empty = document.createElement('div');
+            empty.className = 'empty-events';
+            empty.textContent = 'هنوز رویدادی برای این روز ثبت نشده است. از فرم پایین اضافه کنید.';
+            accordion.appendChild(empty);
+            return;
+        }
+
+        list.forEach((ev, idx) => {
+            const item = buildAccordionItem(ev, idx);
+            accordion.appendChild(item);
+            if (openSet.has(String(idx))) {
+                item.querySelector('.acc-body').hidden = false;
+                item.querySelector('.acc-toggle').textContent = '−';
+            }
+        });
+    }
+
+    function buildAccordionItem(ev, idx) {
+        const item = document.createElement('div');
+        item.className = 'acc-item';
+        item.dataset.eventIdx = idx;
+        item.dataset.type = ev.type || 'national';
+
+        const stats = getEventTaskStats(ev);
+        const allDone = areAllTasksDone(ev);
+        const confirmed = isEventConfirmed(ev);
+        if (confirmed) item.classList.add('done');
+
+        // Header
+        const header = document.createElement('div');
+        header.className = 'acc-header';
+
+        const toggle = document.createElement('span');
+        toggle.className = 'acc-toggle';
+        toggle.textContent = '+';
+
+        const title = document.createElement('span');
+        title.className = 'acc-title';
+        title.textContent = ev.text;
+
+        // Badge
+        const badge = document.createElement('span');
+        badge.className = 'acc-badge';
+
+        if (confirmed) {
+            badge.classList.add('done');
+            badge.textContent = '✓ انجام شده';
+            badge.title = 'کلیک برای لغو تایید';
+            badge.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (!confirm(`لغو تایید انجام مناسبت «${ev.text}»؟`)) return;
+                ev.confirmed = false;
+                saveEvents();
+                buildAccordion();
+                renderCalendar();
+            });
+        } else if (allDone) {
+            badge.classList.add('complete');
+            badge.textContent = `✓ همه ${toPersianDigits(stats.total)} تسک انجام شد`;
+        } else if (stats.total > 0) {
+            badge.classList.add('pending');
+            badge.innerHTML = `${toPersianDigits(stats.pending)} <span class="red">انجام نشده</span> از ${toPersianDigits(stats.total)}`;
+        } else {
+            badge.classList.add('none');
+            badge.textContent = 'بدون تسک';
+        }
+
+        // Confirm button (when all tasks done OR no tasks, and not yet confirmed)
+        let confirmBtn = null;
+        if (!confirmed && (allDone || stats.total === 0)) {
+            confirmBtn = document.createElement('button');
+            confirmBtn.className = 'acc-confirm-btn';
+            confirmBtn.textContent = '✓ تایید';
+            confirmBtn.title = 'تایید انجام این مناسبت';
+            confirmBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                ev.confirmed = true;
+                saveEvents();
+                buildAccordion();
+                renderCalendar();
+            });
+        }
+
+        // Delete
+        const delBtn = document.createElement('button');
+        delBtn.className = 'acc-del-btn';
+        delBtn.textContent = '🗑';
+        delBtn.title = 'حذف رویداد';
+        delBtn.setAttribute('aria-label', 'حذف رویداد');
+
+        header.appendChild(toggle);
+        header.appendChild(title);
+        header.appendChild(badge);
+        if (confirmBtn) header.appendChild(confirmBtn);
+        header.appendChild(delBtn);
+
+        // Body
+        const body = document.createElement('div');
+        body.className = 'acc-body';
+        body.hidden = true;
+
+        const tasksList = document.createElement('ul');
+        tasksList.className = 'tasks-list';
+
+        (ev.tasks || []).forEach(task => {
+            tasksList.appendChild(createTaskElement(ev, task, tasksList));
+        });
+
+        body.appendChild(tasksList);
+
+        // Add task
+        const taskAdd = document.createElement('div');
+        taskAdd.className = 'task-add';
+
+        const taskInput = document.createElement('input');
+        taskInput.type = 'text';
+        taskInput.placeholder = 'تسک جدید...';
+        taskInput.className = 'task-input';
+
+        const taskAddBtn = document.createElement('button');
+        taskAddBtn.className = 'task-add-btn';
+        taskAddBtn.textContent = '+';
+        taskAddBtn.title = 'افزودن تسک';
+
+        taskAddBtn.addEventListener('click', () => {
+            const t = taskInput.value.trim();
+            if (!t) { taskInput.focus(); return; }
+            if (!ev.tasks) ev.tasks = [];
+            const newTask = { text: t, done: false };
+            ev.tasks.push(newTask);
+            // adding undone task → revoke confirmation
+            if (!areAllTasksDone(ev)) ev.confirmed = false;
+            saveEvents();
+            tasksList.appendChild(createTaskElement(ev, newTask, tasksList));
+            taskInput.value = '';
+            taskInput.focus();
+            buildAccordion();
+            renderCalendar();
+        });
+
+        taskInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') { e.preventDefault(); taskAddBtn.click(); }
+        });
+
+        taskAdd.appendChild(taskInput);
+        taskAdd.appendChild(taskAddBtn);
+        body.appendChild(taskAdd);
+
+        // Toggle
+        header.addEventListener('click', (e) => {
+            if (delBtn.contains(e.target)) return;
+            if (confirmBtn && confirmBtn.contains(e.target)) return;
+            if (badge.contains(e.target) && confirmed) return;
+            body.hidden = !body.hidden;
+            toggle.textContent = body.hidden ? '+' : '−';
+        });
+
+        // Delete event
+        delBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (!confirm(`حذف رویداد «${ev.text}» و تمام تسک‌های آن؟`)) return;
+            const key = `${editingMonth}-${editingDay}`;
+            events[key].splice(idx, 1);
+            if (events[key].length === 0) delete events[key];
+            saveEvents();
+            buildAccordion();
+            renderCalendar();
+        });
+
+        item.appendChild(header);
+        item.appendChild(body);
+        return item;
+    }
+
+    function createTaskElement(ev, task, tasksList) {
+        const li = document.createElement('li');
+        li.className = 'task-item' + (task.done ? ' task-done' : '');
+
+        const cb = document.createElement('input');
+        cb.type = 'checkbox';
+        cb.className = 'task-checkbox';
+        cb.checked = task.done;
+
+        const span = document.createElement('span');
+        span.className = 'task-text';
+        span.textContent = task.text;
+
+        const delBtn = document.createElement('button');
+        delBtn.className = 'task-del';
+        delBtn.textContent = '×';
+        delBtn.title = 'حذف تسک';
+        delBtn.setAttribute('aria-label', 'حذف تسک');
+
+        cb.addEventListener('change', () => {
+            task.done = cb.checked;
+            li.classList.toggle('task-done', task.done);
+            // If not all tasks done anymore, revoke confirmation
+            if (!areAllTasksDone(ev)) ev.confirmed = false;
+            saveEvents();
+            buildAccordion();
+            renderCalendar();
+        });
+
+        delBtn.addEventListener('click', () => {
+            const ti = ev.tasks.indexOf(task);
+            if (ti > -1) ev.tasks.splice(ti, 1);
+            if (!areAllTasksDone(ev)) ev.confirmed = false;
+            saveEvents();
+            buildAccordion();
+            renderCalendar();
+        });
+
+        li.appendChild(cb);
+        li.appendChild(span);
+        li.appendChild(delBtn);
+        return li;
+    }
+
+    /* ═══════════════ ADD EVENT ═══════════════ */
+    function addEventFromModal() {
+        if (editingMonth === null) return;
+        const text = modalInput.value.trim();
+        if (!text) { modalInput.focus(); return; }
+        const type = modalCategory.value;
+        const key = `${editingMonth}-${editingDay}`;
+        if (!events[key]) events[key] = [];
+        events[key].push({ text, type, tasks: [], confirmed: false });
+        saveEvents();
+        modalInput.value = '';
+        buildAccordion();
+        renderCalendar();
+        modalInput.focus();
+    }
+    modalAddBtn.addEventListener('click', addEventFromModal);
+    modalInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') { e.preventDefault(); addEventFromModal(); }
+    });
+
+    document.getElementById('modalClose').addEventListener('click', closeModal);
+    modalOverlay.addEventListener('click', (e) => {
+        if (e.target === modalOverlay) closeModal();
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !modalOverlay.hidden) closeModal();
+    });
+
+    /* ═══════════════ SUGGESTION ═══════════════ */
+    const suggestionOverlay = document.getElementById('suggestionOverlay');
+    const suggestionContent = document.getElementById('suggestionContent');
+    const sugDayNum = document.getElementById('sugDayNum');
+    const sugMonthName = document.getElementById('sugMonthName');
+
+    document.getElementById('suggestionBtn').addEventListener('click', () => {
+        if (editingMonth === null) return;
+        const key = `${editingMonth}-${editingDay}`;
+        sugDayNum.textContent = toPersianDigits(editingDay);
+        sugMonthName.textContent = MONTHS[editingMonth].name;
+        suggestionContent.innerHTML = '';
+        const items = SUGGESTIONS[key];
+        if (items && items.length > 0) {
+            items.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'suggestion-item';
+                const h4 = document.createElement('h4');
+                h4.textContent = '📌 ' + item.title;
+                const p = document.createElement('p');
+                p.textContent = item.desc;
+                const src = document.createElement('span');
+                src.className = 'suggestion-source';
+                src.textContent = '🔍 منبع الهام: ' + item.source;
+                div.appendChild(h4);
+                div.appendChild(p);
+                div.appendChild(src);
+                suggestionContent.appendChild(div);
+            });
+        } else {
+            const no = document.createElement('div');
+            no.className = 'no-suggestion';
+            no.textContent = 'برای این روز پیشنهاد خاصی ثبت نشده است. می‌توانید از ایده‌های کلی سایر مناسبت‌ها الهام بگیرید.';
+            suggestionContent.appendChild(no);
+        }
+        modalOverlay.hidden = true;
+        suggestionOverlay.hidden = false;
+        document.body.style.overflow = 'hidden';
+    });
+
+    function closeSuggestion() {
+        suggestionOverlay.hidden = true;
+        document.body.style.overflow = '';
+        if (editingMonth !== null) modalOverlay.hidden = false;
+    }
+    document.getElementById('suggestionClose').addEventListener('click', closeSuggestion);
+    suggestionOverlay.addEventListener('click', (e) => {
+        if (e.target === suggestionOverlay) closeSuggestion();
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !suggestionOverlay.hidden) closeSuggestion();
+    });
+
+    /* ═══════════════ RESET ═══════════════ */
+    document.getElementById('resetBtn').addEventListener('click', () => {
+        if (confirm('همه تغییرات (رویدادها، تسک‌ها و تاییدها) حذف و تقویم به حالت پیش‌فرض بازمی‌گردد. مطمئن هستید؟')) {
+            localStorage.removeItem(STORAGE_EVENTS);
+            events = JSON.parse(JSON.stringify(DEFAULT_EVENTS));
+            saveEvents();
+            renderCalendar();
+        }
+    });
+
+    /* ═══════════════ INIT ═══════════════ */
+    loadFromStorage();
+    buildMonthButtons();
+    renderCalendar();
+</script>
+</body>
+</html>
